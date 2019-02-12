@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    <% include ../../../node_modules/gentelella/vendors/bootstrap/dist/css/bootstrap.css %>
+    <% include ../../../node_modules/gentelella/vendors/font-awesome/css/font-awesome.min.css %>
+    <% include ../../../node_modules/gentelella/build/css/custom.min.css %>
+    
+  </style>
+  <style>
+    .page-break {
+      display: block;
+      page-break-before: always;
+      page-break-after: always;
+    }
+
+    body {
+      padding-top: 10px;
+      font-size: 11px;
+    }
+    
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+
+    td, th {
+      padding: 4px;
+      text-align: center;
+    }
+  </style>
+
+</head>
+<body>
+  <table>
+    <thead>
+      <th>№</th>
+      <th>клиент</th>
+      <th>от дата</th>
+      <th>срок</th>
+      <th>цена</th>
+    </thead>
+    <tbody>
+      <% for (order of orders) { %>
+        <tr>
+          <td><%= order.orderNumber %></td>
+          <td><%= order.cust %></td>
+          <td><%= order.date %></td>
+          <td><%= order.dueDate %></td>
+          <td><%= order.price %> лв.</td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</body>

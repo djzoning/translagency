@@ -1,0 +1,78 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12 x panel">
+						<div class="x_title">
+							<h2>Неплатен хонорар</h2>
+							<div class="clearfix"></div>
+						</div>
+
+						<table data-table-sort='[[0, "asc"]]' data-table-row-callback="rowCallbackNotPaidHonorary" data-table-ajax="/api/translators/not-paid-honorary?format=dataTables" id="not-paid-honorary-table" class="table table-striped">
+							<thead>
+								<tr>
+									<th>Име</th>
+									<th>Хонорар</th>
+								</tr>
+							</thead>
+						</table>
+
+					</div>
+				</div>
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="clearfix"></div>
+			</footer>
+			<!-- /footer content -->
+      
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+
+</body>
+</html>

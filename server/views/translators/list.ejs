@@ -1,0 +1,252 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Преводачи</h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+								<table data-table-sort='[[0, "asc"]]' class="table table-striped table-translators" width="100%" data-table-ajax="/api/translators?format=dataTables">
+									<thead>
+										<tr>
+											<th>Име</th>
+											<th>Телефон</th>
+											<th>Телефон 2</th>
+											<th>Email</th>
+											<th>Email 2</th>
+											<th>Езици</th>
+											<th>Хонорар</th>
+											<th>Действие</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="table-margin-bottom"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="pull-right">
+					<button onclick="focusInput()" id="add-new-translator" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Нов преводач</button>
+					<div class="clearfix"></div>
+				</div>
+			</footer>
+			<!-- /footer content -->
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+
+							<div class="modal-header modal-header-custom">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel2">Нов преводач</h4>
+							</div>
+							<div class="modal-body modal-body-custom">
+
+							<!-- MODAL CONTENT -->
+										<form id="form-create-translator" method="post" action="/api/translators" class="form-horizontal form-label-left">
+
+											<div class="form-group">
+												<label for="first-name" class="control-label col-md-3 col-sm-3 col-xs-12">Лично име *</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="firstName" id="first-name" type="text" class="field-control shadow form-control" placeholder="Лично име">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="last-name" class="control-label col-md-3 col-sm-3 col-xs-12">Фамилия *</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="lastName" id="last-name" type="text" class="field-control shadow form-control" placeholder="Фамилия">
+												</div>
+											</div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Езици *</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select name="languages" class="field-control shadow select2 form-control" data-ajax-url="/api/languages?format=select2" data-placeholder="Езици" multiple="multiple" style="width: 100%">
+                          </select>
+                        </div>
+                      </div>
+											<div class="form-group">
+												<label for="last-name" class="control-label col-md-3 col-sm-3 col-xs-12">Хонорар</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="honorary" id="honorary" type="number" class="field-control shadow form-control" placeholder="Хонорар">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="email" class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="email" id="email" type="email" class="field-control shadow form-control" placeholder="Email">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="second-email" class="control-label col-md-3 col-sm-3 col-xs-12">Втори email</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="secondEmail" id="second-email" type="email" class="field-control shadow form-control" placeholder="Втори email">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="phone" class="control-label col-md-3 col-sm-3 col-xs-12">Телефон</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="phone" id="phone" type="text" class="field-control shadow form-control" placeholder="Телефон">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="second-phone" class="control-label col-md-3 col-sm-3 col-xs-12">Втори телефон</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="secondPhone" id="second-phone" type="text" class="field-control shadow form-control" placeholder="Втори телефон">
+												</div>
+											</div>
+										</form>
+
+							<!-- /MODAL CONTENT -->
+
+							</div>
+							<div class="modal-footer modal-footer-custom">
+								<button type="button" class="btn btn-default btn-no-bottom-margin" data-dismiss="modal">Отказ</button>
+								<button onclick="createTranslator()" type="button" class="btn btn-primary">Запиши</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal modal-confirm fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-sm">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<h4>Ти си на път да изтриеш този преводач.</h4>
+							<h4>Сигурен ли си?</h4>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn-fix-margin btn btn-default" data-dismiss="modal">Не</button>
+							<button type="button" class="btn btn-primary" onclick="deleteTranslator()" data-dismiss="modal">Да</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+
+	<script>
+		miniToastr.init({
+			timeout: 5000
+		})
+
+		setTimeout(() => {
+			let tables = $('table td div')
+			let id
+			tables.each((i, div) => {
+				id = $(div).data('id')
+				$(div).editable({
+					type: $(div).data('type'),
+					step: 'any',
+					source: $(div).data('source'),
+					url: '/api/translators?xedit=true',
+					name: $(div).data('name'),
+					pk: id,
+					ajaxOptions: {
+						type: 'put'
+					}
+				})
+			})
+
+		}, 1000)
+
+		let focusInput = () => {
+			setTimeout(() => {
+				$('#first-name').focus()
+			}, 500)
+		}
+
+		let createTranslator = () => {
+			let $form = $('#form-create-translator')
+			let isValid = true
+			if (!$('[name=firstName]').val() || !$('[name=lastName]').val() || !$('[name=languages]').val()) {
+				isValid = false
+			}
+
+			if (isValid) {
+				document.getElementById('form-create-translator').submit()
+			} else {
+				miniToastr.error('Лично име, фамилия и езици са задължителни полета!')
+			}
+		}
+
+		let translatorId
+		let confirm = element => {
+			$('.modal-confirm').modal()
+			translatorId = $(element).data('id')
+		}
+
+		let deleteTranslator = () => {
+			$.ajax({
+				url: `/api/translators/${translatorId}`,
+				method: 'delete'
+			})
+			.done(() => {
+				window.location.pathname = '/translators'
+			})
+			.error(() => {
+				miniToastr.error('Възникна грешка на сървъра!')
+			})
+		}
+	</script>
+</body>
+</html>

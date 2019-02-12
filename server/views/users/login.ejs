@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include ../partials/main/head %>
+</head>
+<body class="nav-md login">
+  <div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+    
+    <div class="login_wrapper login-form-parent">
+      <div class="form login_form login-form-custom slide-in-bck-center">
+        <section class="login_content login-content-custom">
+          <form id="login-form" action="/users/authenticate" method="post">
+			
+            <h1>Login</h1>
+
+            <% if(loginMessage) { %>
+              <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                </button>
+                <%= loginMessage %>
+              </div>
+            <% } %>
+
+            <div>
+              <input id="username" name="username" type="text" class="form-control" placeholder="Username" required="" />
+            </div>
+            <div>
+              <input id="password" name="password" type="password" class="form-control" placeholder="Password" required="" />
+            </div>
+            <div>
+              <button id="login-button" type="submit" class="btn btn-default submit">Log in</button>
+            </div>
+              <a class="reset_pass" href="#">Lost your password?</a>
+
+            <div class="clearfix"></div>
+
+
+            <div class="clearfix"></div>
+            <br />
+
+            <div>
+              <h1>Тимсет Админ</h1>
+              <p>©<%= currentYear %> All Rights Reserved.</p>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery -->
+  <script src="/gentelella/vendors/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!-- Custom Theme Scripts -->
+  <script src="/gentelella/build/js/custom.min.js"></script>
+  <!-- Custom Script -->
+  <script src="/js/script.js"></script>
+
+</body>
+</html>

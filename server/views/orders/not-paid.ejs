@@ -1,0 +1,109 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12 x panel">
+						<div class="x_title">
+							<h2>Неплатени поръчки</h2>
+							<div class="clearfix"></div>
+						</div>
+
+						<table data-table-sort='[[0, "asc"]]' id="not-paid-orders-table" class="table table-row-pointer table-striped" data-table-row-callback="rowCallbackNotPaidOrdersByCustomer" data-table-footer-callback="footerCallback" data-table-ajax="/api/orders/not-paid-by-customer?format=dataTables">
+							<thead>
+								<tr>
+									<th>Клиент</th>
+									<th>Обща сума</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+								<tfoot>
+									<tr>
+										<td><b>Тотал</b></td>
+										<td></td>
+									</tr>
+								</tfoot>
+						</table>
+
+					</div>
+				</div>
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="clearfix"></div>
+			</footer>
+			<!-- /footer content -->
+      
+			<div id="invoice-number-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel2">Запиши всички поръчки като платени</h4>
+            </div>
+            <div class="modal-body">
+							<div class="form-group">
+								<label class="control-label">Фактура №</label>
+								<input name="invoiceNumber" class="form-control" id="invoice-number">
+							</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default zero-margin" data-dismiss="modal">Отказ</button>
+              <button id="delete-button" onclick="payAll()" type="button" class="btn btn-success pull-right">Плати</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+		</div>
+	</div>s
+
+	<% include ../partials/main/footer-scripts %>
+
+</body>
+</html>

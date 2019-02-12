@@ -1,0 +1,13 @@
+<!-- sidebar menu -->
+  <div class="menu_section">
+    <ul class="nav side-menu">
+      <% routes.forEach(function(route) { %>
+      <li data-route="<%= route.dataRoute %>">
+        <a href="<%= route.path %>">
+          <i class="fa fa-<%= route.icon %>"></i><%= route.title %>
+        </a>
+      </li>
+      <% }) %>
+    </ul>
+  </div>
+<!-- /sidebar menu -->

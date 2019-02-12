@@ -1,0 +1,151 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12 x panel">
+						<div class="x_title">
+							<h2>Поръчки за период</h2>
+							<ul class="nav navbar-right panel_toolbox">
+								<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+								</li>
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+								</li>
+								<li><a class="close-link"><i class="fa fa-close"></i></a>
+								</li>
+							</ul>
+							<div class="clearfix"></div>
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-6">
+							<label for="end-date" class="control-label">начална дата</label>
+							<div >
+								<input name="startDate" id="start-date" type="text" class="date-picker form-control" placeholder="начална дата">
+							</div>
+						</div>
+
+						<div class="col-md-3 col-sm-3 col-xs-6">
+							<label for="end-date" class="control-label">крайна дата</label>
+							<div >
+								<input name="endDate" id="end-date" type="text" class="date-picker form-control" placeholder="крайна дата">
+							</div>
+						</div>
+
+						<div class="col-md-1 col-sm-1 col-xs-2">
+							<button id="get-interval-button" class="btn btn-success" style="margin: 25px 0;">филтър</button>
+						</div>
+
+						<div class="col-md-3 col-sm-3 col-xs-6">			
+							<input type="hidden" id="static_date" value="01/01/2012" />
+							<div id="datepicker"></div>
+						</div>
+
+						<div id="table-section" class="col-md-12 col-sm-12 col-xs-12">
+							<table data-table-row-callback="insightsTableRowCallback" data-table-sort='[[0, "asc"]]' data-table-footer-callback="footerCallback" data-table-ajax="/api/orders/aggregateOrdersPerCustomer?format=dataTables" class="orders-interval-table table table-orders table-striped" class='display' cellspacing='0' width='100%'>
+								<thead>
+									<tr>
+										<th>Клиент</th>
+										<th>Печалба</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+								<tfoot>
+									<tr>
+										<td><b>Тотал</b></td>
+										<td></td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+			</footer>
+			<!-- /footer content -->
+      
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+
+	<script type="text/javascript">
+
+		var staticDate = $("#static_date").val();
+
+		$('#datepicker').datepicker({
+			inline: true,
+			disabled: true,
+			defaultDate: staticDate,
+			weekStart: 1
+		})
+
+		$("#get-interval-button").click(function() {
+			let startDate = $("#start-date").val();
+			let endDate = $("#end-date").val();
+
+			let table = $('.orders-interval-table').DataTable();
+			table.clear().draw();
+		    
+			$.ajax({
+			  url: `/api/orders/aggregateOrdersPerCustomer?fromDate=${ startDate }&toDate=${ endDate }`,
+			}).done(response => {
+				response.forEach((entry) => {
+					if (entry._id.length === 0) {
+						return
+					}
+
+			 		let customer = entry._id[0].name ? entry._id[0].name : entry._id
+			 		let profit = entry.profit
+					table.row.add([customer, `${profit} лв.`])
+				})
+				table.draw()
+			})
+		})
+	</script>
+
+</body>
+</html>

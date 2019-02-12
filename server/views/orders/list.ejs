@@ -1,0 +1,351 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Поръчки</h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+								<table data-table-draw-callback="archiveOrders" data-table-sort='[[0, "desc"]]' data-table-row-callback="rowCallbackOrder" class="table table-orders table-row-pointer table-striped" width="100%" data-table-ajax="/api/orders?format=dataTables">
+									<thead>
+										<tr>
+											<th>№</th>
+											<th>Дата</th>
+											<th>Клиент</th>
+											<th>Титуляр</th>
+											<th>Документ</th>
+											<th>Фактура №</th>
+											<th>Статус</th>
+											<th>Платена</th>
+											<th>Цена</th>
+											<th>От</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+								<div class="table-margin-bottom"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="pull-right">
+					<button id="add-new-customer" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Нова поръчка</button>
+					<div class="clearfix"></div>
+				</div>
+			</footer>
+			<!-- /footer content -->
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+
+							<div class="modal-header modal-header-custom">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel2">Нова поръчка</h4>
+							</div>
+							<div class="modal-body modal-body-custom">
+
+							<!-- MODAL CONTENT -->
+								<form id="form-create-order" method="post" action="/api/orders" class="form-horizontal form-label-left">
+									
+									<div class="fieldset-order-details">
+											<div class="row">
+												<div class="form-group col-md-4">
+													<label class="control-label">Клиент</label>
+													<select name="customer" id="customer" class="select2-new-option form-control" data-ajax--url="/api/customers?format=select2" data-placeholder="Клиент" style="width: 100%">
+													</select>
+													<a class="underline-hover" target="_blank" href="/customers?modal=add-new-customer">Няма такъв клиент?</a>
+												</div>
+
+												<div class="sender-control form-group col-md-4">
+													<label class="control-label">Подател</label>
+													<select name="sender" id="sender" class="select2-referer-senders form-control" data-placeholder="Подател" style="width: 100%">
+													</select>
+												</div>
+
+												<div class="form-group col-md-4">
+													<label for="titular" class="control-label">Титуляр</label>
+													<input name="titular" class="form-control" placeholder="Титуляр">
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="form-group col-md-4">
+													<label for="end-date" class="control-label">Срок</label>
+													<input required="required" name="endDate" id="end-date" type="text" class="date-picker form-control" placeholder="Срок">
+												</div>
+		
+												<div class="form-group col-md-4">
+													<label for="description" class="control-label">Описание</label>
+													<input name="description" class="form-control" placeholder="Описание">
+												</div>
+
+												<div class="form-group col-md-4">
+													<label class="control-label">Фактура №</label>
+													<input name="invoiceNumber" class="form-control" id="invoice-number">
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="legalization-switch col-md-3">
+													<label>
+														Легализация <input type="checkbox" class="legalization-on js-switch" data-switchery="true" style="display: none;">
+													</label>
+												</div>
+												<div class="hidden legalization-tax form-group col-md-3">
+													<label for="state-tax" class="control-label">Държавна такса</label>
+													<div class="">
+														<input type="number" id="state-tax" name="stateTax" class="form-control" placeholder="Държавна такса">
+													</div>
+												</div>
+												<div class="hidden legalization-tax form-group col-md-3">
+													<label for="company-tax" class="control-label">Фирмена такса</label>
+													<div class="">
+														<input type="number" id="company-tax" name="companyTax" class="form-control" placeholder="Фирмена такса">
+													</div>
+												</div>
+											</div>
+
+									</div>
+
+									<div class="order-entry-container">
+										<div class="border">
+											<div class="initial form-group col-md-3">
+												<label class="control-label">Тип документ</label>
+												<div class="select2-height-fix">
+													<select id="doc-type" name="docType" class="select2 form-control" data-ajax--url="/api/doc-types?format=select2" data-tags="true" data-placeholder="Тип документ" style="width: 100%">
+													</select>
+													<a class="underline-hover" target="_blank" href="/doc-types?modal=add-new-document">Няма такъв тип документ?</a>
+												</div>
+											</div>
+											<div class="initial form-group col-md-3">
+												<label class="control-label">Страници</label>
+												<div>
+													<input name="pagesCount"type="number" class="pages-count form-control" placeholder="Страници">
+												</div>
+											</div>
+											<div class="initial form-group col-md-3">
+												<label for="price-per-page" class="control-label">Цена / стр.</label>
+												<div>
+													<input name="pricePerPage" type="number" class="price-per-page form-control" placeholder="Цена / стр.">
+												</div>
+											</div>
+											<div class="initial form-group col-md-3">
+												<label for="honorary-per-page" class="control-label">Хонорар / стр.</label>
+												<div>
+													<input name="honoraryPerPage" type="number" class="honorary-per-page form-control" placeholder="Хонорар / стр.">
+												</div>
+											</div>
+											<div class="initial form-group col-md-4">
+												<label class="control-label">Превод от език</label>
+												<div>
+													<select name="translateFromInit" class="translate-from select2 form-control" data-ajax--url="/api/languages?format=select2" data-placeholder="Превод от език" style="width: 100%">
+													</select>
+												</div>
+												<a class="underline-hover" target="_blank" href="/languages?modal=add-new-language">Няма такъв език?</a>
+											</div>
+											<div class="initial form-group col-md-4">
+												<label class="control-label">Превод на език</label>
+												<div>
+													<select name="translateToInit" class="translate-to select2 form-control" data-ajax--url="/api/languages?format=select2" data-placeholder="Превод на език" style="width: 100%">
+													</select>
+												</div>
+												<a class="underline-hover" target="_blank" href="/languages?modal=add-new-language">Няма такъв език?</a>
+											</div>
+											<div class="initial form-group col-md-4">
+												<label class="control-label">Преводач</label>
+												<div>
+													<select onchange="setHonorary(this)" id="translator" data-tags="true" name="translator" class="select2-referer-translator form-control" data-placeholder="Преводач" style="width: 100%">
+													</select>
+												</div>
+												<a class="underline-hover" target="_blank" href="/translators?modal=add-new-translator">Няма такъв преводач?</a>
+											</div>
+										</div>
+									</div>
+
+								</form>
+
+							<!-- /MODAL CONTENT -->
+
+							</div>
+							<div class="modal-footer modal-footer-custom">
+								<button onclick="addNewDoc()" type="button" class="pull-left btn btn-primary btn-no-bottom-margin"><i class="fa fa-plus"></i> Документ</button>
+								<button type="button" class="btn btn-default btn-no-bottom-margin" data-dismiss="modal">Отказ</button>
+								<button onclick="document.getElementById('form-create-order').submit()" type="button" class="btn btn-primary">Запиши</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+	
+	<script>
+		miniToastr.init()
+
+		$('#customer').change(event => {
+			let customer = event.target.value
+			$('.select2-referer-senders').select2({
+				ajax: {
+					url: `/api/customers/${customer}/senders?format=select2`
+				},
+				tags: true
+			})
+		})
+
+		let languages = {}
+		let bgLangId
+		$.get('/api/languages')
+		.done(langs => {
+			_.map(langs, lang => {
+				languages[lang._id] = {}
+				languages[lang._id].name = lang.name
+				languages[lang._id].price = lang.price
+				if (lang.name.toLowerCase() === 'български') {
+					bgLangId = lang._id
+				}
+			})
+		})
+
+    let languageFromChanged = event => {
+      let languageFrom = $(event.target).parents('.border').find('.translate-from').val()
+			let languageTo = $(event.target).parents('.border').find('.translate-to').val()
+      $(event.target).parents('.border').find('.price-per-page').val(languages[languageFrom].price)
+      $(event.target).parents('.border').find('.translate-to').next().find('span[id^=select2-translateToInit-][id$=-container]').text('български')
+      $(event.target).parent().parent().parent().find('[name=translateFrom]').remove()
+      $(event.target).parent().parent().parent().find('[name=translateTo]').remove()
+      $(event.target).parent().append(`<input type="hidden" name="translateFrom" value="${languageFrom}">`)
+      $(event.target).parent().append(`<input type="hidden" name="translateTo" value="${bgLangId}">`)
+      $(event.target).parents('.border').find('.select2-referer-translator')
+				.select2({
+					ajax: {
+						url: `/api/translators?language=${languageFrom}&format=select2&reqfrom=s2`
+					}
+				})
+    }
+
+    let languageToChanged = event => {
+      let languageFrom = $(event.target).parents('.border').find('.translate-from').val()
+			let languageTo = $(event.target).parents('.border').find('.translate-to').val()
+      $(event.target).parents('.border').find('.price-per-page').val(languages[languageTo].price)
+      $(event.target).parents('.border').find('.translate-from').next().find('span[id^=select2-translateFromInit-][id$=-container]').text('български')
+      $(event.target).parent().parent().parent().find('[name=translateFrom]').remove()
+      $(event.target).parent().parent().parent().find('[name=translateTo]').remove()
+      $(event.target).parent().append(`<input type="hidden" name="translateFrom" value="${bgLangId}">`)
+      $(event.target).parent().append(`<input type="hidden" name="translateTo" value="${languageTo}">`)
+      $(event.target).parents('.border').find('.select2-referer-translator')
+				.select2({
+					ajax: {
+						url: `/api/translators?language=${languageTo}&format=select2&reqfrom=s2`
+					}
+				})
+    }
+
+		$('.translate-from').change(languageFromChanged)
+		$('.translate-to').change(languageToChanged)
+
+		let setHonorary = (el) => {
+			let translatorId = el.value
+			let $honoraryEl = $(el).parent().parent().parent().find('.honorary-per-page')
+			$.ajax({
+				url: `/api/translators/${translatorId}`
+			})
+			.then(res => {
+				let translator = res[0]
+				$honoraryEl.val(translator.honorary)
+			})
+		}
+
+		let addNewDoc = () => {
+			let $fields = $('.order-entry-container div.initial').clone()
+			let $border = $('<div class="border"></div')
+			$border.append($fields)
+			$fields.find('#translator').val('')
+			$fields.find('.honorary-per-page').val('')
+			$fields.find('.translate-from').val('')
+			$fields.find('.translate-to').val('')
+			$fields.find('#doc-type').val('')
+			$fields.find('select+span').remove()
+			$fields.removeClass('initial')
+			$('.order-entry-container').append($border)
+			$fields.find('.select2').each((i, element) => {
+				let $element = $(element)
+				$element.select2({
+					placeholder: "$element.attr('data-placeholder')",
+					allowClear: true
+				})
+			})
+			$fields.find('.translate-from').val('').change(languageFromChanged)
+			$fields.find('.translate-to').val('').change(languageToChanged)
+		}
+
+		let legalizationOn = false
+		let legCounter = 0
+		$('.legalization-on').change(event => {
+			legCounter++
+			if (!legalizationOn && legCounter % 2 !== 0) {
+				$('.legalization-tax').removeClass('hidden')
+				legalizationOn = true
+			} else if (legalizationOn && legCounter % 2 !== 0) {
+				$('.legalization-tax').addClass('hidden')
+				legalizationOn = false
+			}
+		})
+
+	</script>
+
+</body>
+</html>

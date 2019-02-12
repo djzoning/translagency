@@ -1,0 +1,240 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+				<div class="row">
+				  <div class="col-md-12 col-sm-12 col-xs-12">
+
+						<!--x panel-->
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Клиент</h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+
+                <!--NAME-->
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Име </span>
+									<span class="value" id="name" data-name="name"></span>
+									<i class="fa fa-building"></i>
+								</div>
+
+                <!--NSN-->
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">ЕИК </span>
+									<span class="value" id="nsn" data-name="nsn"></span>
+									<i class="fa fa-id-card"></i>
+								</div>
+
+                <!--ADDRESS-->
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Адрес </span>
+									<span class="value" id="address" data-name="address"></span>
+									<i class="fa fa-location-arrow"></i>
+								</div>
+
+                <!--EMAIL-->
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Email </span>
+									<span class="value" id="email" data-name="email"></span>
+									<i class="fa fa-envelope"></i>
+								</div>
+
+                <!--PHONE-->
+                <div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Телефон </span>
+									<span class="value" id="phone" data-name="phone"></span>
+									<i class="fa fa-phone"></i>
+								</div>
+
+                <!--POC-->
+                <div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Лице за контакт </span>
+									<span class="value" id="contact-person" data-name="contactPerson"></span>
+									<i class="fa fa-user"></i>
+								</div>
+
+                <!--SENDERS-->
+                <div class="info-container col-xs-12">
+									<span class="custom-label">Податели </span>
+									<span class="value" id="senders"></span>
+									<i class="fa fa-users"></i>
+								</div>
+
+								<!--DESCRIPTION-->
+                <div class="info-container col-xs-12">
+									<span class="custom-label">Описание </span>
+									<span class="value" data-type="textarea" data-name="description" id="description"></span>
+								</div>
+
+							</div>
+						</div>
+						<!--/x panel-->
+				  </div>
+				</div>
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="pull-right">
+					<button id="delete-customer" type="button" class="btn btn-danger" data-toggle="modal" data-target=".bs-example-modal-sm"><i class="fa fa-remove"></i> Изтриване</button>
+					<div class="clearfix"></div>
+				</div>
+			</footer>
+			<!-- /footer content -->
+
+		</div>
+	</div>
+
+	<div class="modal modal-confirm-status fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<h4>Ти си на път да изтриеш този клиент.</h4>
+					<h4>Сигурен ли си?</h4>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn-fix-margin btn btn-default" data-dismiss="modal">Не</button>
+					<button type="button" class="btn btn-primary" onclick="deleteCustomer()" data-dismiss="modal">Да</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+	
+	<script>
+		miniToastr.init({
+			timeout: 5000
+		})
+	
+		let customerId = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+		let customer
+		
+		let populateData = () => {
+			$.ajax({
+				url: `/api/customers/${customerId}`
+			}).done(response => {
+				customer = response[0]
+				let senders = customer.senders.toString()
+				let sendersStr = ''
+				for (let char of senders) {
+					sendersStr += char
+					if (char == ',') {
+						sendersStr += ' '
+					}
+				}
+				$('#name').text(customer.name)
+				$('#nsn').html(customer.nsn)
+				$('#address').html(customer.address)
+				$('#email').html(customer.email)
+				$('#phone').html(customer.phone)
+				$('#contact-person').html(customer.contactPerson)
+				$('#senders').html(sendersStr)
+				$('#description').html(customer.description)
+
+
+				let selectors = ['#name', '#nsn', '#address', '#email', '#phone', '#contact-person', '#description']
+				_.map(selectors, selector => {
+					$(selector).each((i, element) => {
+						let $element = $(element)
+						let id = customerId
+						$(element).editable({
+							type: $element.data('type') || 'text',
+							url: `/api/customers/${ id }?xedit=true`,
+							name: $element.data('name'),
+							pk: id,
+							ajaxOptions: {
+								type: 'put'
+							},
+							success: res => {
+								miniToastr.success('Поръчката е редактирана успешно!')
+							},
+							error: (res) => {
+								miniToastr.error('Възникна грешка на сървъра!')
+							}
+						})
+					})
+				})
+
+				$('#senders').editable({
+					type: 'textarea',
+					url: `/api/customers/${ customerId }/senders`,
+					name: 'senders',
+					pk: customerId,
+					ajaxOptions: {
+						type: 'post'
+					},
+					success: res => {
+						miniToastr.success('Поръчката е редактирана успешно!')
+					},
+					error: (res) => {
+						miniToastr.error('Възникна грешка на сървъра!')
+					}
+				})
+			})
+		}
+
+    populateData()
+
+		let deleteCustomer = () => {
+			$.ajax({
+				url: `/api/customers/${customerId}`,
+				method: 'delete'
+			})
+			.done(() => {
+				window.location.pathname = '/customers'
+			})
+			.error(() => {
+				miniToastr.error('Възникна грешка на сървъра!')
+			})
+		}
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12 x_panel">
+						<div class="x_title">
+							<h2>Неплатен хонорар</h2>
+							<div class="clearfix"></div>
+						</div>
+						<table data-table-row-callback="rowCallbackOrder" data-table-ajax="/api/orders/not-paid-honorary/<%= translatorId %>?format=dataTables" id="not-paid-honorary-table" class="table table-striped">
+							<thead>
+								<tr>
+									<th>Поръчка №</th>
+                  <th>Клиент</th>
+                  <th>Дата</th>
+                  <th>Хонорар</th>
+                  <th>Статус</th>
+                  <th>Платена</th>
+                  <th>От</th>
+								</tr>
+							</thead>
+						</table>
+						<div class="table-margin-bottom"></div>
+					</div>
+				</div>
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+        <button id="get-pdf" type="button" class="btn btn-primary pull-right"><i class="fa fa-file-pdf-o"></i> PDF</button>
+				<button id="pay-honorary" type="button" class="btn btn-success pull-right"><i class="fa fa-money"></i> Плати хонорар</button>
+				<div class="clearfix"></div>
+			</footer>
+			<!-- /footer content -->
+      
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+
+  <script>
+    let translator = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+
+    miniToastr.init({
+			timeout: 5000
+		})
+
+		let getPdf = () => {
+      window.open(`/not-paid-honorary/pdf/${translator}`, '_blank')
+		}
+
+		let payHonorary = () => {
+			$.ajax({
+				url: `/api/translators/${translator}/pay-honorary`,
+				method: 'post'
+			})
+			.done(res => {
+				miniToastr.success('Хонорара е платен успешно!')
+			})
+			.error(er => {
+				miniToastr.error('Възникна грешка на сървъра!')
+			})
+		}
+
+		$('#get-pdf').click(event => {
+			if ($(event.target).hasClass('disabled')) {
+				return
+			}
+
+			getPdf()
+		})
+
+		$('#pay-honorary').click(event => {
+			if ($(event.target).hasClass('disabled')) {
+				return
+			}
+
+			payHonorary()
+		})
+  </script>
+
+</body>
+</html>

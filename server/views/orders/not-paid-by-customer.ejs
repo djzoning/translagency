@@ -1,0 +1,185 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12 x panel">
+						<div class="x_title">
+							<h2>Неплатени поръчки</h2>
+							<div class="clearfix"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label class="control-label">клиент</label>
+							<div class="">
+								<select id="customer" name="customer" class="select2 form-control" data-ajax--url="/api/customers?format=select2" data-placeholder="Customer" style="width: 100%">
+								</select>
+							</div>
+						</div>
+
+						<table id="not-paid-orders-table" class="table table-striped" data-table-footer-callback="footerCallbackNotPaidByCustomer" data-table-ajax="/api/orders?customer=<%= customerId %>&isPaid=false&format=dataTables&type=notPaid">
+							<thead>
+								<tr>
+									<th>№</th>
+									<th>Дата</th>
+									<th>Клиент</th>
+									<th>Подател</th>
+									<th>Титуляр</th>
+									<th>Документ</th>
+									<th>От език</th>
+									<th>На език</th>
+									<th>Бр. стр.</th>
+									<th>Цена / стр.</th>
+									<th>Легализация общо</th>
+									<th>Обща сума</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+								<tfoot>
+									<tr>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td><b>Тотал</b></td>
+										<td></td>
+									</tr>
+								</tfoot>
+						</table>
+
+					</div>
+				</div>
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<button id="get-pdf" type="button" class="btn btn-primary pull-right"><i class="fa fa-file-pdf-o"></i> PDF</button>
+				<button id="pay-all" type="button" class="btn btn-success pull-right"><i class="fa fa-money"></i> Плати всички</button>
+				<div class="clearfix"></div>
+			</footer>
+			<!-- /footer content -->
+      
+			<div id="invoice-number-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel2">Запиши всички поръчки като платени</h4>
+            </div>
+            <div class="modal-body">
+							<div class="form-group">
+								<label class="control-label">Фактура №</label>
+								<input name="invoiceNumber" class="form-control" id="invoice-number">
+							</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default zero-margin" data-dismiss="modal">Отказ</button>
+              <button id="delete-button" onclick="payAll()" type="button" class="btn btn-success pull-right">Плати</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+		</div>
+	</div>s
+
+	<% include ../partials/main/footer-scripts %>
+
+	
+	<script type="text/javascript">
+		let invoiceNumber = ''
+		miniToastr.init({
+			timeout: 5000
+		})
+
+		let customer = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+
+		$("#customer").change((event) => {
+			customer = event.target.value
+			window.location.href = `/not-paid-orders/${customer}`
+		})
+
+		let getPdf = () => {
+			window.open(`/not-paid-orders/pdf?customer=${customer}`, '_blank')
+		}
+
+		let payAll = () => {
+			$.ajax({
+				url: `/api/orders/${customer}/payall`,
+				method: 'post',
+				data: { invoiceNumber: invoiceNumber }
+			})
+			.done(res => {
+				miniToastr.success('Всички поръчки за този клиент са маркирани като платени!')
+				$('#invoice-number-modal').modal('hide')
+			})
+			.error(er => {
+				miniToastr.error('Възникна грешка на сървъра!')
+				$('#invoice-number-modal').modal('hide')
+			})
+		}
+
+		$('#get-pdf').click(event => {
+			getPdf()
+		})
+
+		$('#pay-all').click(event => {
+			$('#invoice-number-modal').modal()
+		})
+
+		$('#invoice-number').keyup(() => {
+			invoiceNumber = $('#invoice-number').val()
+		})
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,177 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Клиенти</h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+								<table data-table-sort='[[0, "asc"]]' class="table table-row-pointer table-striped" width="100%" data-table-row-callback="rowCallbackCustomer" data-table-ajax="/api/customers?format=dataTables">
+									<thead>
+										<tr>
+											<th>Име</th>
+											<th>Адрес</th>
+											<th>Телефон</th>
+											<th>Лице за контакт</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="pull-right">
+					<button onclick="focusInput()" id="add-new-customer" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Нов клиент</button>
+					<div class="clearfix"></div>
+				</div>
+			</footer>
+			<!-- /footer content -->
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+
+							<div class="modal-header modal-header-custom">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel2">Нов клиент</h4>
+							</div>
+							<div class="modal-body modal-body-custom">
+
+							<!-- MODAL CONTENT -->
+										<form id="form-create-customer" method="post" action="/api/customers" class="form-horizontal form-label-left">
+
+											<!--NAME-->
+											<div class="form-group">
+												<label for="customer-name" class="control-label col-md-3 col-sm-3 col-xs-12">Име</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="name" id="customer-name" type="text" class="shadow form-control" placeholder="Име" value="<%= locals.name %>">
+												</div>
+											</div>
+
+											<!--SENDER-->
+											<div class="form-group">
+												<label for="sender" class="control-label col-md-3 col-sm-3 col-xs-12">Подател</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<!--<select name="sender" id="sender" class="select2-multiple shadow form-control" placeholder="Подател" value="<%= locals.sender %>" multiple="multiple"></select>-->
+													<select name="senders" class="shadow select2-new-option form-control" data-placeholder="Подател" multiple="multiple" style="width: 100%">
+                          </select>
+												</div>
+											</div>
+
+											<!--NSN-->
+											<div class="form-group">
+												<label for="nsn" class="control-label col-md-3 col-sm-3 col-xs-12">ЕИК</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="nsn" value="<%= locals.nsn %>" id="nsn" type="text" class="shadow form-control" placeholder="ЕИК">
+												</div>
+											</div>
+
+											<!--ADDRESS-->
+											<div class="form-group">
+												<label for="address" class="control-label col-md-3 col-sm-3 col-xs-12">Адрес</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="address" value="<%= locals.address %>" id="address" type="text" class="shadow form-control" placeholder="Адрес">
+												</div>
+											</div>
+
+											<!--MAIL-->
+											<div class="form-group">
+												<label for="email" class="control-label col-md-3 col-sm-3 col-xs-12">E-mail</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input placeholder="E-mail" value="<%= locals.email %>" type="email" id="email" class="shadow form-control parsley-success" name="email" data-parsley-trigger="change" required="" data-parsley-id="22">
+												</div>
+											</div>
+
+											<!--PHONE-->
+											<div class="form-group">
+												<label for="phone" class="control-label col-md-3 col-sm-3 col-xs-12">Телефон</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="phone" value="<%= locals.phone %>" type="text" class="shadow form-control" id="phone" placeholder="Телефон">
+												</div>
+											</div>
+
+											<!--CONTACT PERSON-->
+											<div class="form-group">
+												<label id="contact-person" class="control-label col-md-3 col-sm-3 col-xs-12">Лице за контакт</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="contactPerson" value="<%= locals.contactPerson %>" type="text" class="shadow form-control" id="contact-person" placeholder="Лице за контакт">
+												</div>
+											</div>
+
+										</form>
+
+							<!-- /MODAL CONTENT -->
+
+							</div>
+							<div class="modal-footer modal-footer-custom">
+								<button type="button" class="btn btn-default btn-no-bottom-margin" data-dismiss="modal">Отказ</button>
+								<button onclick="document.getElementById('form-create-customer').submit()" type="button" class="btn btn-primary">Запиши</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+
+	<script>
+		let focusInput = () => {
+			setTimeout(() => {
+				$('#customer-name').focus()
+			}, 500)
+		}
+	</script>
+</body>
+</html>

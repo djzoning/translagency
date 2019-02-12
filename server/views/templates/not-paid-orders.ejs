@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    <% include ../../../node_modules/gentelella/vendors/bootstrap/dist/css/bootstrap.css %>
+  </style>
+  <style>
+    .page-break {
+      display: block;
+      page-break-before: always;
+      page-break-after: always;
+    }
+
+    body {
+      padding-top: 10px;
+      font-size: 7px;
+    }
+    
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    .customer {
+      min-width: 50px;
+    }
+
+    .narrow {
+      max-width: 40px;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+
+    td, th {
+      padding: 2px;
+      text-align: center;
+    }
+
+    th {
+      max-width: 50px;
+    }
+
+    tfoot td:first-child {
+      padding-right: 7px;
+    }
+  </style>
+
+</head>
+<body>
+  <table>
+    <thead>
+      <th>№</th>
+      <th>дата</th>
+      <th class="customer">клиент</th>
+      <th class="sender">подател</th>
+      <th class="sender">титуляр</th>
+      <th>док.</th>
+      <th>език от</th>
+      <th>език на</th>
+      <th>бр. стр.</th>
+      <th class="narrow">цена / стр.</th>
+      <th class="narrow">лег. общо</th>
+      <th class="narrow">обща сума</th>
+    </thead>
+    <tbody>
+      <% for (order of data.orders) { %>
+        <tr>
+          <td><%= order.orderNumber %></td>
+          <td><%= order.date %></td>
+          <td><%= order.customer.name %></td>
+          <td><%= order.sender %></td>
+          <td><%= order.titular %></td>
+          <td><%= order.docType %></td>
+          <td><%= order.translateFrom %></td>
+          <td><%= order.translateTo %></td>
+          <td><%= order.pagesCountTotal %></td>
+          <td><%= order.pricePerPage %> лв.</td>
+          <td><%= order.stateTax + order.companyTax %> лв.</td>
+          <td><%= order.price %> лв.</td>
+        </tr>
+      <% } %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="text-right" colspan="11">Тотал</td>
+        <td><%= data.total %> лв.</td>
+      </tr>
+    </tfoot>
+  </table>
+</body>

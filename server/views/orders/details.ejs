@@ -1,0 +1,752 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+				<div class="row">
+				  <div class="col-md-12 col-sm-12 col-xs-12">
+
+						<!--x panel-->
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Поръчка № <span class="value" id="order-number"></span> от <span class="value" id="start-date"></span></h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Клиент </span>
+									<span class="value" id="customer-name"></span>
+									<i class="fa fa-suitcase"></i>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Подател </span>
+									<span class="value" id="sender" data-type="select" data-name="sender"></span>
+									<i class="fa fa-user"></i>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Титуляр </span>
+									<span class="value" id="titular" data-type="text" data-name="titular"></span>
+									<i class="fa fa-user"></i>
+								</div>
+
+								<div id="is-paid" class="checkbox info-container col-md-4 col-xs-12">
+									<span class="custom-label">Платена </span>
+									<input type="checkbox" class="flat">
+								</div>
+
+								<div id="is-done" class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Статус </span>
+									<input type="checkbox" class="flat">
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Цена </span>
+									<span class="value" id="price"></span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Срок </span>
+									<span class="value" id="dueDate"></span>
+									<input name="endDate" id="date-control" type="text" class="date-picker date-picker-custom form-control" data-callback="dueDateChanged" placeholder="End Date">
+									<i class="fa fa-calendar-o"></i>
+								</div>
+
+								<% if (user.roles.indexOf('admin') !== -1) { %>
+									<div class="info-container col-md-4 col-xs-12">
+										<span class="custom-label">Печалба </span>
+										<span class="value" id="profit" data-type="number" data-name="profit"></span>
+										<span>лв</span>
+									</div>
+								<% } %>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Държавна такса </span>
+									<span class="value" id="state-tax" data-type="number" data-name="stateTax"></span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Фирмена такса </span>
+									<span class="value" id="company-tax" data-type="number" data-name="companyTax"></span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Общо такса </span>
+									<span class="value" id="total-tax"></span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Хонорар </span>
+									<span class="value" id="honorary"></span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Преводи печалба </span>
+									<span class="value" id="translations-profit"></span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Общо преводи </span>
+									<span class="value" id="translations-total"></span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Описание </span>
+									<span class="value" data-type="textarea" data-name="description" id="description"></span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Фактура № </span>
+									<span class="value" id="invoice-number" data-type="number" data-name="invoiceNumber"></span>
+								</div>
+
+								<div class="info-container col-md-4 col-xs-12">
+									<span class="custom-label">Създадена от </span>
+									<span class="value" id="created-by"></span>
+								</div>
+
+							</div>
+						</div>
+						<!--/x panel-->
+				  </div>
+
+					<div class="order-entries">
+						
+					</div>
+				</div>
+					<div class="table-margin-bottom"></div>
+			</div>
+			<!-- /page content -->
+
+      <!-- footer content -->
+			<footer class="footer-custom">
+				<div class="pull-right">
+					<button id="delete-order" type="button" class="btn btn-danger pull-right"><i class="fa fa-remove"></i> Изтрий</button>
+					<button id="get-pdf" type="button" class="btn btn-primary pull-right"><i class="fa fa-file-pdf-o"></i> PDF</button>
+					<button id="add-new-customer" type="button" class="btn btn-primary" data-toggle="modal" data-target=".add-new-item-modal"><i class="fa fa-plus"></i> Документ</button>
+          <div class="clearfix"></div>
+				</div>
+			</footer>
+			<!-- /footer content -->
+
+			<div class="modal fade add-new-item-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+
+							<div class="modal-header modal-header-custom">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel2">Нов документ</h4>
+							</div>
+							<div class="modal-body modal-body-custom">
+
+							<!-- MODAL CONTENT -->
+								<form id="form-create-new-item" method="post" action="/api/orders/<%= orderId %>/new-item" class="form-horizontal form-label-left">
+									
+									<div class="order-entry-container">
+										<div class="border">
+											<div class="initial form-group col-md-3">
+												<label class="control-label">Тип документ</label>
+												<div class="select2-height-fix">
+													<select id="doc-type" name="docType" class="select2 form-control" data-ajax--url="/api/doc-types?format=select2" data-tags="true" data-placeholder="Тип документ" style="width: 100%">
+													</select>
+													<a class="underline-hover" target="_blank" href="/doc-types?modal=add-new-document">Няма такъв тип документ?</a>
+												</div>
+											</div>
+											<div class="initial form-group col-md-3">
+												<label class="control-label">Страници</label>
+												<div>
+													<input name="pagesCount" type="number" class="form-control" placeholder="Страници">
+												</div>
+											</div>
+											<div class="initial form-group col-md-3">
+												<label for="price-per-page" class="control-label">Цена / стр.</label>
+												<div>
+													<input name="pricePerPage" type="number" class="form-control" placeholder="Цена / стр.">
+												</div>
+											</div>
+											<div class="initial form-group col-md-3">
+												<label for="honorary-per-page" class="control-label">Хонорар / стр.</label>
+												<div>
+													<input name="honoraryPerPage" type="number" class="honorary-per-page form-control" placeholder="Хонорар / стр.">
+												</div>
+											</div>
+											<div class="initial form-group col-md-4">
+												<label class="control-label">Превод от език</label>
+												<div>
+													<select name="translateFromInit" class="translate-from select2 form-control" data-ajax--url="/api/languages?format=select2" data-placeholder="Превод от език" style="width: 100%">
+													</select>
+												</div>
+												<a class="underline-hover" target="_blank" href="/languages?modal=add-new-language">Няма такъв език?</a>
+											</div>
+											<div class="initial form-group col-md-4">
+												<label class="control-label">Превод на език</label>
+												<div>
+													<select name="translateToInit" class="translate-to select2 form-control" data-ajax--url="/api/languages?format=select2" data-placeholder="Превод на език" style="width: 100%">
+													</select>
+												</div>
+												<a class="underline-hover" target="_blank" href="/languages?modal=add-new-language">Няма такъв език?</a>
+											</div>
+											<div class="initial form-group col-md-4">
+												<label class="control-label">Преводач</label>
+												<div>
+													<select onchange="setHonorary(this)" id="translator" data-tags="true" name="translator" class="select2-referer-translator form-control" data-placeholder="Преводач" style="width: 100%">
+													</select>
+												</div>
+												<a class="underline-hover" target="_blank" href="/translators?modal=add-new-translator">Няма такъв преводач?</a>
+											</div>
+										</div>
+									</div>
+
+								</form>
+
+							<!-- /MODAL CONTENT -->
+
+							</div>
+							<div class="modal-footer modal-footer-custom">
+								<button type="button" class="btn btn-default btn-no-bottom-margin" data-dismiss="modal">Отказ</button>
+								<button onclick="document.getElementById('form-create-new-item').submit()" type="button" class="btn btn-primary">Запиши</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="confirm-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel2">Изтриване на поръчка</h4>
+            </div>
+            <div class="modal-body">
+              <h4>Ти си на път да изтриеш тази поръчка. Сигурен ли си?</h4>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default zero-margin" data-dismiss="modal">Отказ</button>
+              <button id="delete-button" type="button" class="btn btn-danger">Изтрий</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+			<div id="set-paid-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel2"></h4>
+            </div>
+            <div class="modal-body">
+              <h4>Ти си на път да запишеш поръчката като платена. Сигурен ли си?</h4>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default zero-margin" data-dismiss="modal">Отказ</button>
+              <button onclick="setPaid()" type="button" class="btn btn-primary">ОК</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+			<div id="set-done-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+              </button>
+              <h4 class="modal-title" id="myModalLabel2"></h4>
+            </div>
+            <div class="modal-body">
+              <h4>Ти си на път да запишеш поръчката като готова. Сигурен ли си?</h4>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default zero-margin" data-dismiss="modal">Отказ</button>
+              <button onclick="setDone()" type="button" class="btn btn-primary">ОК</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+	
+	
+	<script>
+		miniToastr.init({
+			timeout: 5000
+		})
+		
+		var dueDateChanged = (value) => {
+			$
+			.ajax({
+				type: 'put',
+				url: `/api/orders/${orderId}?xedit=true`,
+				data: `name=endDate&value=${value}`
+			})
+			.done(res => {
+				console.log(res)
+				miniToastr.success('Due date has been saved successfully.')
+
+				$('#date-control').hide()
+				$("#dueDate").show()
+				$("#dueDate").html(formatDate(new Date(res.endDate)))
+			})
+			.error(err => {
+				miniToastr.error('An error occured!')
+
+				$('#date-control').hide()
+				$("#dueDate").show()
+			})
+		}
+
+		$("#dueDate").click(() => {
+			$('#date-control').show()
+			$("#dueDate").css('position', 'absolute')
+			$('#date-control').click()
+		})
+
+		$('body').click(() => {
+			if ($('.daterangepicker').css('display') === 'none') {
+				$('#date-control').hide()
+				$("#dueDate").css('position', 'static')
+				$("#dueDate").show()
+			}
+		})
+	
+		let orderId = window.location.href.substr(window.location.href.lastIndexOf('/') + 1)
+		let order
+		let _translator
+		let _customer
+		let pricePerPage
+		let pagesCount
+		let honoraryPerPage
+		let amountPaid
+		
+		$('#date-control').hide()
+		
+		let setPaid = () => {
+			$.ajax({
+				url: `/api/orders/${ orderId }`,
+				method: 'put',
+				data: {
+					isPaid: true
+				}
+			})
+			.done(res => {
+				$('#is-paid').off('ifChanged')
+				$('#is-paid').iCheck('check')
+				$('#is-paid').iCheck('disable')
+				$('#set-paid-modal').modal('hide')
+				miniToastr.success('Поръчката е записана като платена!')
+			})
+			.error(er => {
+				console.log(er)
+				if (er.status === 403) {
+					miniToastr.warn('Това действие не е разрешено.')
+				} else {
+					miniToastr.error('Възникна грешка на сървъра')
+				}				
+			})
+		}
+
+		let setDone = () => {
+			$.ajax({
+				url: `/api/orders/${ orderId }`,
+				method: 'put',
+				data: {
+					isDone: true
+				}
+			})
+			.done(res => {
+				$('#is-done').off('ifChanged')
+				$('#is-done').iCheck('check')
+				$('#is-done').iCheck('disable')
+				$('#set-done-modal').modal('hide')
+				miniToastr.success('Поръчката е записана като готова!')
+			})
+			.error(er => {
+				miniToastr.error('Възникна грешка на сървъра')
+			})
+		}
+		
+		let populateData = () => {
+			$.ajax({
+				url: "/api/orders/" + orderId
+			}).done((response) => {
+				order = response[0]
+				console.log(order)
+				pricePerPage = response[0].pricePerPage
+				pagesCount = response[0].pagesCount
+				honoraryPerPage = response[0].honoraryPerPage
+				amountPaid = response[0].amountPaid
+				$("#order-number").text(order.orderNumber)
+				$("#start-date").text(formatDate(new Date(order.startDate)))
+				$("#description").html(order.description)
+				let customerName = order.customer ? order.customer.name : order.customerName
+				$("#customer-name").html(customerName)
+				let cust = order.customer ? order.customer._id : '0'
+				$("#sender").html(order.sender).data('source', `/api/customers/${cust}/senders?format=xedit`)
+				$("#titular").html(order.titular)
+				$('#price').html(order.price)
+				$('#profit').html(order.profit)
+				$("#created-by").html(order.createdBy.firstName + ` ` + response[0].createdBy.lastName)
+				$("#state-tax").html(order.stateTax ? order.stateTax : 0)
+				$("#company-tax").html(order.companyTax ? order.companyTax : 0)
+				let st = order.stateTax ? order.stateTax : 0
+				let ct = order.companyTax ? order.companyTax : 0
+				console.log(ct)
+				console.log(st)
+				let totalTax = (st * 1000 + ct * 1000) / 1000
+				console.log(totalTax)
+				$("#total-tax").html(totalTax)
+				let honorary = 0
+				_.map(order.orderEntries, entry => {
+					honorary += entry.pagesCount * 1000 * entry.honoraryPerPage / 1000
+				})
+				$("#honorary").html(honorary)
+				let translationsProfit = 0
+				_.map(order.orderEntries, entry => {
+					translationsProfit += ((entry.pagesCount * 1000 * entry.pricePerPage) - (entry.pagesCount * 1000 * entry.honoraryPerPage)) / 1000
+				})
+				$("#translations-profit").html(translationsProfit)
+				$("#translations-total").html((translationsProfit * 1000 + honorary * 1000) / 1000)
+				$('#invoice-number').html(order.invoiceNumber)
+
+
+				
+				if (order.isPaid) {
+					$('#is-paid').iCheck('check')
+					$('#is-paid').iCheck('disable')
+				} else {
+					<% if (user.roles.indexOf('admin') !== -1) { %>
+						console.log('yeah')
+						$('#is-paid').on('ifChanged', event => {
+							$('#set-paid-modal').modal()
+							setTimeout(() => {
+								$('#is-paid').iCheck('uncheck')
+							}, 100)
+						})
+					<% } else { %>
+						console.log('not yeah')
+						$('#is-paid').iCheck('disable')
+					<% } %>
+				}
+
+				if (order.isDone) {
+					$('#is-done').iCheck('check')
+					$('#is-done').iCheck('disable')
+				} else {
+					$('#is-done').on('ifChanged', event => {
+						$('#set-done-modal').modal()
+						setTimeout(() => {
+							$('#is-done').iCheck('uncheck')
+						}, 100)
+					})
+				}
+
+				if (response[0].endDate) {
+					let endDate = new Date(response[0].endDate)
+					$("#dueDate").html(formatDate(endDate))
+				}
+				_.map(order.orderEntries, entry => {
+					let xTitle = `<div class="col-md-6">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>${ entry.docType ? entry.docType : '' }</h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+								<div class="info-container col-md-12">
+									<span class="custom-label custom-label-mini">Превод </span>
+									<span class="value value-mini translate-from" data-id="${ entry._id }" data-type="select" data-name="translateFrom" data-source="/api/languages?format=xedit">${ entry.translateFrom.name }</span>
+									<i class="fa fa-language fa-2x"></i>
+									<span class="value value-mini translate-to" data-id="${ entry._id }" data-type="select" data-name="translateTo" data-source="/api/languages?format=xedit">${ entry.translateTo.name }</span>
+								</div>
+
+								<div class="info-container col-xs-6">
+									<span class="custom-label custom-label-mini">Преводач </span>
+									<span class="value value-mini translator" data-id="${ entry._id }" data-type="select" data-name="translator" data-source="/api/translators?format=xedit">${ entry.translator ? entry.translator.firstName + ' ' + entry.translator.lastName : entry.oneTimeTranslator }</span>
+									<i class="fa fa-user"></i>
+								</div>
+
+								<div class="info-container col-xs-6">
+									<span class="custom-label custom-label-mini">Хонорар / стр. </span>
+									<span class="value value-mini honorary" data-id="${ entry._id }" data-type="number" data-translator-id="${ entry.translator ? entry.translator._id : 0 }" data-name="honoraryPerPage">${ entry.honoraryPerPage }</span>
+									<span>лв</span>
+								</div>
+
+								<div class="info-container col-xs-6">
+									<span class="custom-label custom-label-mini">Страници </span>
+									<span class="value value-mini pages-count" data-id="${ entry._id }" data-type="number" data-translator-id="${ entry.translator ? entry.translator._id : 0 }" data-name="pagesCount">${ entry.pagesCount }</span>
+									<i class="fa fa-files-o"></i>
+								</div>
+
+								<div class="info-container col-xs-6">
+									<span class="custom-label custom-label-mini">Цена / стр. </span>
+									<span class="value value-mini price-per-page" data-id="${ entry._id }" data-type="number" data-name="pricePerPage">${ entry.pricePerPage }</span>
+									<span>лв</span>
+								</div>
+							</div>
+						</div>
+					</div>`
+					$('.order-entries').append(xTitle)
+				})
+				
+				let orderInfoSelectors = ['#profit', '#state-tax', '#company-tax', '#invoice-number', '#sender', '#titular', '#description']
+				_.map(orderInfoSelectors, selector => {
+					$(selector).editable({
+						type: $(selector).data('type'),
+						step: 'any',
+						min: 1,
+						url: `/api/orders/${ orderId }?xedit=true`,
+						name: $(selector).data('name'),
+						pk: orderId,
+						ajaxOptions: {
+							type: 'put'
+						},
+						success: res => {
+							if (res.newPrice) {
+								$('#price').html(res.newPrice)
+								$('#profit').html(res.newProfit)
+								$('#total-tax').html(res.totalTax)
+							}
+
+							miniToastr.success('Поръчката е редактирана успешно!')
+						},
+						error: () => {
+							miniToastr.error('Възникна грешка на сървъра!')
+						}
+					})
+				})
+
+				let selectors = ['.translate-from', '.translate-to', '.honorary', '.pages-count', '.price-per-page']
+				_.map(selectors, selector => {
+					$(selector).each((i, element) => {
+						let $element = $(element)
+						$(element).editable({
+							type: $element.data('type'),
+							step: 'any',
+							min: 1,
+							url: `/api/order-items/${ $element.data('id') }?translator=${ $element.data('translator-id') }`,
+							name: $element.data('name'),
+							pk: $element.data('id'),
+							source: $element.data('source'),
+							ajaxOptions: {
+								type: 'put'
+							},
+							success: res => {
+								if (res.newPrice) {
+									$('#price').html(res.newPrice)
+									$('#profit').html(res.newProfit)
+									$('#honorary').html(res.newHonorary)
+									$('#translations-profit').html(res.newTranslationsProfit)
+									$('#translations-total').html(((res.newHonorary * 1000) + (res.newTranslationsProfit * 1000)) / 1000)
+								}
+
+								miniToastr.success('Поръчката е редактирана успешно!')
+							},
+							error: (res) => {
+								miniToastr.error('Възникна грешка на сървъра!')
+							}
+						})
+					})
+				})
+
+				$('.translator').editable({
+					type: $('.translator').data('type'),
+					step: 'any',
+					min: 1,
+					url: `/api/order-items/update-translator/${ $('.translator').data('id') }`,
+					name: $('.translator').data('name'),
+					pk: $('.translator').data('id'),
+					source: $('.translator').data('source'),
+					ajaxOptions: {
+						type: 'put'
+					},
+					success: res => {
+						if (res.newPrice) {
+							$('#price').html(res.newPrice)
+							$('#profit').html(res.newProfit)
+							$('#honorary').html(res.newHonorary)
+							$('#translations-profit').html(res.newTranslationsProfit)
+							$('#translations-total').html(((res.newHonorary * 1000) + (res.newTranslationsProfit * 1000)) / 1000)
+						}
+
+						miniToastr.success('Поръчката е редактирана успешно!')
+					},
+					error: (res) => {
+						miniToastr.error('Възникна грешка на сървъра!')
+					}
+				})
+			})
+		}
+
+		populateData()
+		
+		function formatDate(date) {
+		  let monthNames = [
+			"януари", "февруари", "март",
+			"април", "май", "юни", "юли",
+			"август", "септември", "октомври",
+			"ноември", "декември"
+		  ]
+
+		  let day = date.getDate()
+		  let monthIndex = date.getMonth()
+		  let year = date.getFullYear()
+
+		  return day + ' ' + monthNames[monthIndex] + ' ' + year
+		}
+
+		let closeModal = () => {
+			$('.modal').modal('hide')
+		}
+
+    let getPdf = () => {
+			window.open(`/orders/pdf/${orderId}`, '_blank')
+		}
+
+		let deleteOrder = () => {
+			$.ajax({
+				url: `/api/orders/${orderId}`,
+				method: 'delete'
+			})
+			.done(res => {
+				location.pathname = '/orders'
+			})
+			.error(() => {
+				miniToastr.error('Възникна грешка на сървъра')
+			})
+		}
+
+		let confirmDelete = () => {
+			$('#confirm-modal').modal()
+		}
+
+		$('#get-pdf').click(getPdf)
+		$('#delete-order').click(confirmDelete)
+		$('#delete-button').click(deleteOrder)
+
+		let setHonorary = (el) => {
+			let translatorId = el.value
+			let $honoraryEl = $(el).parent().parent().parent().find('.honorary-per-page')
+			$.ajax({
+				url: `/api/translators/${translatorId}`
+			})
+			.then(res => {
+				let translator = res[0]
+				$honoraryEl.val(translator.honorary)
+			})
+		}
+
+		let languages = {}
+		let bgLangId
+		$.get('/api/languages')
+		.done(langs => {
+			_.map(langs, lang => {
+				languages[lang._id] = {}
+				languages[lang._id].name = lang.name
+				languages[lang._id].price = lang.price
+				if (lang.name.toLowerCase() === 'български') {
+					bgLangId = lang._id
+				}
+			})
+		})
+
+		let languageFromChanged = event => {
+      let languageFrom = $(event.target).parents('.border').find('.translate-from').val()
+			let languageTo = $(event.target).parents('.border').find('.translate-to').val()
+      $(event.target).parents('.border').find('.price-per-page').val(languages[languageFrom].price)
+      $(event.target).parents('.border').find('.translate-to').next().find('span[id^=select2-translateToInit-][id$=-container]').text('български')
+      $(event.target).parent().parent().parent().find('[name=translateFrom]').remove()
+      $(event.target).parent().parent().parent().find('[name=translateTo]').remove()
+      $(event.target).parent().append(`<input type="hidden" name="translateFrom" value="${languageFrom}">`)
+      $(event.target).parent().append(`<input type="hidden" name="translateTo" value="${bgLangId}">`)
+      $(event.target).parents('.border').find('.select2-referer-translator')
+				.select2({
+					ajax: {
+						url: `/api/translators?language=${languageFrom}&format=select2&reqfrom=s2`
+					}
+				})
+    }
+
+    let languageToChanged = event => {
+      let languageFrom = $(event.target).parents('.border').find('.translate-from').val()
+			let languageTo = $(event.target).parents('.border').find('.translate-to').val()
+      $(event.target).parents('.border').find('.price-per-page').val(languages[languageTo].price)
+      $(event.target).parents('.border').find('.translate-from').next().find('span[id^=select2-translateFromInit-][id$=-container]').text('български')
+      $(event.target).parent().parent().parent().find('[name=translateFrom]').remove()
+      $(event.target).parent().parent().parent().find('[name=translateTo]').remove()
+      $(event.target).parent().append(`<input type="hidden" name="translateFrom" value="${bgLangId}">`)
+      $(event.target).parent().append(`<input type="hidden" name="translateTo" value="${languageTo}">`)
+      $(event.target).parents('.border').find('.select2-referer-translator')
+				.select2({
+					ajax: {
+						url: `/api/translators?language=${languageTo}&format=select2&reqfrom=s2`
+					}
+				})
+    }
+
+		$('.translate-from').change(languageFromChanged)
+		$('.translate-to').change(languageToChanged)
+
+	</script>
+</body>
+</html>

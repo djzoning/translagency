@@ -1,0 +1,256 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col" style="position: fixed">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Типове документи</h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+								<table class="table table-orders table-striped" width="100%" data-table-ajax="/api/documents?format=dataTables" data-table-draw-callback="setupReturnDateCallback">
+									<thead>
+										<tr>
+											<th>Дата</th>
+											<th>Титуляр</th>
+											<th>Министерство</th>
+											<th>Дата на внасяне</th>
+											<th>Куриер</th>
+											<th>Дата на връщане</th>
+											<th>Забележка</th>
+											<th>Действие</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="pull-right">
+					<button onclick="focusInput()" id="add-new-document" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Нов документ</button>
+					<div class="clearfix"></div>
+				</div>
+			</footer>
+			<!-- /footer content -->
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+
+							<div class="modal-header modal-header-custom">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel2">Нов документ</h4>
+							</div>
+							<div class="modal-body modal-body-custom">
+
+							<!-- MODAL CONTENT -->
+								<form id="form-create-document" method="post" action="/api/documents" class="form-horizontal form-label-left">
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="titular" class="control-label">Титуляр</label>
+                      <input name="titular" id="titular" type="text" class="shadow form-control" placeholder="Титуляр">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label class="control-label">Министерство</label>
+                      <select name="ministry" id="ministry" class="select2-new-option form-control" data-ajax--url="/api/ministries?format=select2" data-placeholder="Министерство" style="width: 100%">
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="submission-date" class="control-label">Дата на внасяне</label>
+                      <input required="required" name="submissionDate" id="submission-date" type="text" class="date-picker form-control" placeholder="Дата на внасяне">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="currier" class="control-label">Куриер</label>
+                      <input name="currier" id="currier" type="text" class="shadow form-control" placeholder="Куриер">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="return-date" class="control-label">Дата на връщане</label>
+                      <input required="required" name="returnDate" id="return-date" type="text" class="date-picker form-control" placeholder="Дата на връщане">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="description" class="control-label">Забележка</label>
+                      <input name="description" id="description" type="text" class="shadow form-control" placeholder="Забележка">
+                    </div>
+                  </div>
+								</form>
+							<!-- /MODAL CONTENT -->
+
+							</div>
+							<div class="modal-footer modal-footer-custom">
+								<button type="button" class="btn btn-default btn-no-bottom-margin" data-dismiss="modal">Отказ</button>
+								<button onclick="document.getElementById('form-create-document').submit()" type="button" class="btn btn-primary">Запиши</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+
+	
+	<script>
+		miniToastr.init({
+			timeout: 5000
+		})
+
+		let setupReturnDate = () => {
+			$('table .date-picker').each((i, element) => {
+
+				$(element).daterangepicker({
+					format: 'DD-MM-YYYY',
+					singleDatePicker: true,
+					calender_style: 'picker_1',
+					locale: {
+						firstDay: 1
+					}
+				}, function (start, end, label) {
+					let documentId = $(element).data('document-id')
+					let field = $(element).data('field')
+					returnDateChanged(start, documentId, field)
+				})
+			})
+      
+      $('.date-editable').click(event => {
+        let $element = $(event.target)
+        let $input = $element.next()
+        $input.removeClass('hidden')
+        $input.click()
+        $input.addClass('hidden')
+      })
+		}
+
+		let returnDateChanged = (value, documentId, field) => {
+			console.log(documentId)
+			console.log(value)
+			$.ajax({
+				type: 'put',
+				url: `/api/documents/${documentId}?xedit=true`,
+				data: `name=${field}&value=${value}`
+			})
+			.done(res => {
+				console.log(res)
+				miniToastr.success('Документа е редактиран успешно.')
+
+				$(`[data-field=${field}][data-document-id=${documentId}]`).prev().html(formatDate(new Date(res[field])))
+			})
+			.error(err => {
+				miniToastr.error('An error occured!')
+
+				$('#date-control').hide()
+				$("#dueDate").show()
+			})
+		}
+
+		
+
+		let focusInput = () => {
+			setTimeout(() => {
+				$('#titular').focus()
+			}, 500)
+		}
+
+    let deleteDocument = (id) => {
+      $.ajax({
+				url: `/api/documents/${id}`,
+				method: 'delete'
+			})
+			.done(() => {
+				window.location.pathname = '/documents'
+			})
+			.error(() => {
+				miniToastr.error('Възникна грешка на сървъра!')
+			})
+    }
+
+		setTimeout(() => {
+			let tables = $('table td div:not(.date-editable)')
+			let id
+			tables.each((i, div) => {
+				id = $(div).data('id')
+				$(div).editable({
+					type: $(div).data('type'),
+					step: 'any',
+					source: $(div).data('source'),
+					url: `/api/documents/${id}?xedit=true`,
+					name: $(div).data('name'),
+					pk: id,
+					ajaxOptions: {
+						type: 'put'
+					}
+				})
+			})
+
+		}, 1000)
+
+		let formatDate = date => {
+		  let monthNames = [
+			"януари", "февруари", "март",
+			"април", "май", "юни", "юли",
+			"август", "септември", "октомври",
+			"ноември", "декември"
+		  ]
+
+		  let day = date.getDate()
+		  let monthIndex = date.getMonth()
+		  let year = date.getFullYear()
+
+		  return day + ' ' + monthNames[monthIndex] + ' ' + year
+		}
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!-- menu profile quick info -->
+<div class="profile">
+  <div class="profile_info">
+    <span id="greeting"></span>
+    <h2><%= user.firstName %></h2>
+  </div>
+</div>
+<!-- /menu profile quick info -->
+
+<script>
+  let greetEl = document.getElementById('greeting')
+  let greeting
+  let hours = new Date().getHours()
+  if (hours <= 10) {
+    greeting = 'Добро утро,'
+  } else if (hours <= 18) {
+    greeting = 'Добър ден,'
+  } else {
+    greeting = 'Добър вечер,'
+  }
+
+  greetEl.innerText = greeting
+</script>

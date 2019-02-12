@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    <% include ../../../node_modules/gentelella/vendors/bootstrap/dist/css/bootstrap.css %>
+    
+  </style>
+  <style>
+    .page-break {
+      display: block;
+      page-break-before: always;
+      page-break-after: always;
+    }
+
+    body {
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    table td {
+      padding: 10px 10px 40px 10px;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    td.wide {
+      min-width: 100px;
+    }
+
+    .narrow {
+      max-width: 60px;
+    }
+  </style>
+
+</head>
+<body>
+  <table>
+    <tr>
+      <td class="narrow">Номер</td>
+      <td class="bold"><%= order.orderNumber %></td>
+      <td></td>
+      <td class="narrow">Клиент</td>
+      <td class="bold wide"><%= order.customer ? order.customer.name : order.customerName %></td>
+      <td></td>
+      <td class="narrow">Цена</td>
+      <td class="bold wide"><%= order.price %> лв.</td>
+    </tr>
+    <tr>
+      <td class="narrow">Дата</td>
+      <td class="bold wide"><%= order.date %></td>
+      <td></td>
+      <td class="narrow">Срок</td>
+      <td class="bold wide"><%= order.dueDate %></td>
+      <td></td>
+      <td class="narrow">Платена</td>
+      <td class="bold wide"><%= order.paid %></td>
+    </tr>
+    <tr>
+      <td class="narrow">Статус</td>
+      <td class="bold"><%= order.status %></td>
+      <td></td>
+      <td class="">Описание</td>
+      <td colspan="4" class="bold"><%= order.description %></td>
+    </tr>
+  </table>
+</body>

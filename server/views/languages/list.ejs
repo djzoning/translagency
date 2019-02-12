@@ -1,0 +1,159 @@
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+	<% include ../partials/main/head %>
+</head>
+<body>
+	<script>
+		if (localStorage['bodyClass']) {
+			document.getElementsByTagName('body')[0].className = localStorage['bodyClass']
+		} else {
+			document.getElementsByTagName('body')[0].className = 'nav-md footer_fixed'
+		}
+	</script>
+	<div class="container body">
+		<div class="main_container">
+			<div class="col-md-3 left_col">
+				<div class="left_col scroll-view">
+					<div class="navbar nav_title" style="border: 0;">
+						<a href="/" class="site_title"><span>Тимсет Админ</span></a>
+					</div>
+
+					<div class="clearfix"></div>
+
+					<!-- menu profile quick info -->
+            <% include ./../partials/menu-profile-quick-info/menu-profile-quick-info %>
+					<!-- /menu profile quick info -->
+
+					<br />
+
+					<!-- sidebar menu -->
+						<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+						</div>
+					<!-- /sidebar menu -->
+
+				</div>
+			</div>
+
+			<!-- top navigation -->
+        <% include ./../partials/top-navigation/top-navigation %>
+			<!-- /top navigation -->
+
+			<!-- page content -->
+			<div class="right_col" role="main">
+
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="x_panel">
+							<div class="x_title">
+								<h2>Езици</h2>
+								<div class="clearfix"></div>
+							</div>
+							<div class="x_content">
+								<table data-table-sort='[[0, "asc"]]' class="table table-striped" width="100%" data-table-callback="tableCallback" data-table-ajax="/api/languages?format=dataTables">
+									<thead>
+										<tr>
+											<th>Език</th>
+											<th>Цена</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+			<!-- /page content -->
+
+			<!-- footer content -->
+			<footer class="footer-custom">
+				<div class="pull-right">
+					<button onclick="focusInput()" id="add-new-language" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-plus"></i> Нов език</button>
+					<div class="clearfix"></div>
+				</div>
+			</footer>
+			<!-- /footer content -->
+			<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+
+							<div class="modal-header modal-header-custom">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel2">Нов език</h4>
+							</div>
+							<div class="modal-body modal-body-custom">
+
+							<!-- MODAL CONTENT -->
+										<form id="form-create-language" method="post" action="/api/languages" class="form-horizontal form-label-left">
+
+											<div class="form-group">
+												<label for="name" class="control-label col-md-3 col-sm-3 col-xs-12">Език</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input name="name" id="name" type="text" class="shadow form-control" placeholder="Език">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="price" class="control-label col-md-3 col-sm-3 col-xs-12">Цена</label>
+												<div class="col-md-9 col-sm-9 col-xs-12">
+													<input min="1" name="price" id="price" type="number" class="shadow form-control" placeholder="Цена">
+												</div>
+											</div>
+										</form>
+
+							<!-- /MODAL CONTENT -->
+
+							</div>
+							<div class="modal-footer modal-footer-custom">
+								<button type="button" class="btn btn-default btn-no-bottom-margin" data-dismiss="modal">Отказ</button>
+								<button onclick="createLang()" type="button" class="btn btn-primary">Запиши</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<% include ../partials/main/footer-scripts %>
+
+	<script>
+		miniToastr.init()
+
+		let focusInput = () => {
+			setTimeout(() => {
+				$('#name').focus()
+			}, 500)
+		}
+
+		setTimeout(() => {
+			let tables = $('table td:last-child div')
+			let language
+			tables.each((i, div) => {
+				language = $(div).data('language')
+				$(div).editable({
+					type: 'number',
+					step: 'any',
+					url: '/api/languages/update-price',
+					name: 'price',
+					pk: language,
+				})
+			})
+
+		}, 1000)
+
+		let createLang = () => {
+			if (!$('#name').val()) {
+				miniToastr.warn('Полето език е задължително!')
+
+				return
+			}
+
+			document.getElementById('form-create-language').submit()
+		}
+	</script>
+</body>
+</html>
