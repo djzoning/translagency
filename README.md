@@ -92,10 +92,15 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
   ```
   
 ### 4. Setup nginx as reverse proxy server
-- enter the config
+- modify the nginx config
+
   ```
   sudo nano /etc/nginx/sites-available/default
+  ```
+  
+- then add the following config
 
+  ```
   . . .
 
   server_name <full.domain.name>;
@@ -109,11 +114,13 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
           proxy_cache_bypass $http_upgrade;
       }
   }
+  ```
+  
+- after that reload the nginx service
 
+  ```
   sudo nginx -t
-
   sudo systemctl reload nginx
-
   sudo systemctl restart nginx
   ```
 ### 5. Create bash script file that will be run by the service’s systemd script file
