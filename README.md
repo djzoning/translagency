@@ -2,11 +2,22 @@
 ## Setup guide
 This guide explains how to setup the application on Ubuntu 18.04 assuming that we are using Digital Ocean droplet
 ### 1. Create a droplet with Ubuntu OS 18.04 on Digital Ocean
+- as you are creating the new droplet set your ssh key for access
+- change the ssh port to 225
+  ```
+   sudo nano /etc/ssh/sshd_config
+  ```
+  ```
+  ...
+  Port 225
+  ...
+  ```
 - create admin user
 
   ```
   adduser admin --intogroup sudo
   ```
+- add your SSH pub key in ```/home/admin/.ssh/authorized_keys``` in order to have access with admin user
   
 ### 2. Install prerequisites
 - Install git
