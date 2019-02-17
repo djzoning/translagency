@@ -59,10 +59,10 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 - install wkhtmltopdf before using pdf otherwise you will get an error, run the following commands
 
   ```
-  sudo apt-get install xvfb
+  sudo apt install xvfb
   sudo add-apt-repository ppa:ecometrica/servers
-  sudo apt-get update
-  sudo apt-get install wkhtmltopdf
+  sudo apt update
+  sudo apt install wkhtmltopdf
   ```
   
 - install nginx
@@ -160,11 +160,11 @@ replace the <> placeholders with the corresponding values
 
   ```
   [Unit]
-  Description = test node
+  Description = translagency demo app
   After = network.target
 
   [Service]
-  ExecStart = /home/admin/scripts/app-start.sh
+  ExecStart = /bin/sh /home/admin/scripts/app-start.sh
   Restart = on-failure
 
   [Install]
@@ -175,8 +175,8 @@ replace the <> placeholders with the corresponding values
 
   ```
   sudo systemctl daemon-reload
-  sudo service translagency stop
-  sudo service translagency start
+  sudo systemctl stop translagency
+  sudo systemctl start translagency
   ```
   
 ### 7. Obtaining an SSL certificate
