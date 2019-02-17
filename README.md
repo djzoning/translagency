@@ -5,7 +5,7 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 - as you are creating the new droplet set your ssh key for access
 - change the ssh port to 225
   ```
-   sudo nano /etc/ssh/sshd_config
+   nano /etc/ssh/sshd_config
   ```
   ```
   ...
@@ -15,7 +15,7 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 - create admin user
 
   ```
-  adduser admin --intogroup sudo
+  adduser admin --ingroup sudo
   ```
 - add your SSH pub key in ```/home/admin/.ssh/authorized_keys``` in order to have access with admin user
   
