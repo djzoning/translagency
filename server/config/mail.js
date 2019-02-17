@@ -5,7 +5,7 @@ let _ = require('lodash')
 module.exports = (config) => {
   setInterval(() => {
     let isTimeForMail = new Date().getHours() === config.mailHour
-    if (!isTimeForMail) {
+    if (!isTimeForMail || config.mailServerUser === undefined) {
       return
     }
 

@@ -126,16 +126,18 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 ### 5. Create bash script file that will be run by the service’s systemd script file
 - create app start file -> ```~/scripts/app-start.sh```
 - set environment variables in a ```~/scripts/app-start.sh``` file and start the app from there as follows
+if you do not set mail-server-user the app won't send emails, it is useful when running the project locally or when running a demo version you don't want to send emails
+replace the <> placeholders with the corresponding values
 
   ```
   export NODE_ENV=production
   export PORT=9000
   export MONGO_DB_CONNECTION_STRING=mongodb://localhost:27017/translagency
-  export ADMIN_PASSWORD=<admin-seed-password>
-  export MAIL_SERVER_USER=admin@timset.com
+  export ADMIN_PASSWORD=<admin-user-password> # for example: 123
+  export MAIL_SERVER_USER=<mail-server-user> # for example: admin@timset.com 
   export MAIL_SERVER_PASS=<password>
   export MAIL_RECEIVER=<receiver-email>
-  cd /home/admin/TimsetNode && node index.js
+  cd /home/admin/translagency && node index.js
   ```
   
 - make the script file executable
@@ -148,7 +150,7 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 - here is an example of a systemd script file
 
   ```
-  sudo nano /etc/systemd/system/<service-name>.service
+  sudo nano /etc/systemd/system/translagency.service
   ```
 
 - this is sample systemd script
@@ -159,7 +161,7 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
   After = network.target
 
   [Service]
-  ExecStart = /home/<user>/scripts/test-node.sh
+  ExecStart = /home/admin/scripts/app-start.sh
   Restart = on-failure
 
   [Install]
@@ -170,8 +172,8 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 
   ```
   sudo systemctl daemon-reload
-  sudo service <service-name> stop
-  sudo service <service-name> start
+  sudo service translagency stop
+  sudo service translagency start
   ```
   
 ### 7. Obtaining an SSL certificate
@@ -186,7 +188,7 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 - restore from db dump
 
   ```
-  mongorestore -d <database-name> /path/to/db/backup
+  mongorestore -d translagency /path/to/db/backup
   ```
   
 you can get a db dump from here -> https://drive.google.com/drive/u/0/folders/0ByeD3ubUK9VLZ2Nxc0xZSzFtVVk
