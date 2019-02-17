@@ -77,9 +77,8 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
 
   ```
   sudo add-apt-repository ppa:certbot/certbot
-  sudo apt-get update
-  sudo apt-get install python-certbot-nginx
-  sudo nano /etc/nginx/sites-available/example.com
+  sudo apt update
+  sudo apt install python-certbot-nginx
   ```
   
 ### 3. Setup the application
