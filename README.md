@@ -12,6 +12,7 @@ This guide explains how to setup the application on Ubuntu 18.04 assuming that w
   Port 225
   ...
   ```
+- restart SSH service to take the changes
   ```
   systemctl restart sshd
   ```
