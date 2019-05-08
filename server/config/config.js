@@ -5,7 +5,7 @@ let rootPath = path.normalize(path.join(__dirname, '/../../'))
 module.exports = {
   development: {
     rootPath: rootPath,
-    db: 'mongodb://localhost:27017/timset',
+    db: 'mongodb://localhost:27017/translagency',
     port: 9005,
     mailHour: 18,
     mailServerUser: '',
